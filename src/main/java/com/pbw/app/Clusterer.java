@@ -2,7 +2,6 @@ package com.pbw.app;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.Kohonen;
-import org.neuroph.nnet.learning.kmeans.KMeansClustering;
 import org.neuroph.util.NeuralNetworkFactory;
 import org.neuroph.util.data.norm.MaxMinNormalizer;
 import org.neuroph.util.data.norm.Normalizer;
