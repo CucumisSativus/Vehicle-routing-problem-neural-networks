@@ -31,6 +31,9 @@ public class Problem {
         return gridHeight;
     }
 
+    public int getVehicleCapacity(){
+        return vehicles.get(0).getCapacity();
+    }
     private void findGridSize(){
         int width =0, height =0;
         for(Customer c : customers){
