@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class MapPanel extends JPanel {
 
+    private final int CUSTOMER_SIZE = 40;
+
     private final Map<Integer, List<Route>> seed;
     private List<Customer> customers;
 
@@ -35,31 +37,30 @@ public class MapPanel extends JPanel {
         super.paintComponent(g);
 
         try {
-            for (Customer singleCustomer : customers) {
-                paintCustomer(singleCustomer, g);
-            }
-
             Iterator mapEntriesIterator = this.seed.entrySet().iterator();
+            Integer groupIndex = 0;
             while (mapEntriesIterator.hasNext()) {
                 Map.Entry<java.lang.Integer, List<Route>> pair = (Map.Entry) mapEntriesIterator.next();
                 List<Route> routes = pair.getValue();
 
                 for (Route singleRoute : routes) {
-                    paintRoute(singleRoute, customers, g);
+                    paintRouteWithCustomers(groupIndex, this.seed.size(), singleRoute, customers, g);
                 }
 
                 mapEntriesIterator.remove();
+                groupIndex++;
             }
         } catch (NieMaCustomeraWChujSrogiException e) {
             // deal with it
         }
     }
 
-    private void paintRoute(Route route, List<Customer> customers, Graphics graphics) throws NieMaCustomeraWChujSrogiException {
+    private void paintRouteWithCustomers(Integer groupIndex, Integer groupsCount, Route route, List<Customer> customers, Graphics graphics) throws NieMaCustomeraWChujSrogiException {
         Customer customerFrom = null;
         Customer customerTo = null;
         Integer customerFromId = route.getCustomerFromId();
         Integer customerToId = route.getCustomerToId();
+        Color groupColor = null;
 
         for (Customer singleCustomer : customers) {
             Integer singleCustomerId = singleCustomer.getCustNo();
@@ -78,15 +79,27 @@ public class MapPanel extends JPanel {
         if (customerFrom == null || customerTo == null) {
             throw new NieMaCustomeraWChujSrogiException(customerFrom == null ? customerFromId : customerToId);
         }
-        graphics.drawLine(customerFrom.getxCoord(), customerFrom.getyCoord(), customerTo.getxCoord(), customerTo.getyCoord());
+
+        groupColor = Color.getHSBColor(groupIndex*1.0f/groupsCount, 1.0f, 1.0f);
+
+        paintCustomer(groupColor, customerFrom, graphics);
+        paintCustomer(groupColor, customerTo, graphics);
+
+        paintRoute(groupColor, customerFrom, customerTo,graphics);
     }
 
-    private void paintCustomer(Customer customer, Graphics graphics) {
-        graphics.setColor(Color.black);
-        graphics.fillArc(customer.getxCoord(), customer.getyCoord(),
-                10, 10, 0, 360);
+    private void paintRoute(Color groupColor, Customer customerFrom, Customer customerTo, Graphics graphics) {
+        int halvedCustomerSize = CUSTOMER_SIZE/2;
+        graphics.setColor(groupColor);
+        graphics.drawLine(customerFrom.getxCoord() + halvedCustomerSize, customerFrom.getyCoord() + halvedCustomerSize, customerTo.getxCoord() + halvedCustomerSize, customerTo.getyCoord() + halvedCustomerSize);
+    }
+
+    private void paintCustomer(Color groupColor, Customer customer, Graphics graphics) {
+        graphics.setColor(groupColor);
+        graphics.fillArc(customer.getxCoord(), customer.getyCoord(), CUSTOMER_SIZE, CUSTOMER_SIZE, 0, 360);
         graphics.setColor(Color.white);
-        graphics.drawString(java.lang.Integer.toString(customer.getCustNo()), customer.getxCoord() + 1, customer.getyCoord() - 5);
+        graphics.drawString(Integer.toString(customer.getCustNo()), customer.getxCoord() + (CUSTOMER_SIZE/2), customer.getyCoord() + (CUSTOMER_SIZE/2) - 1);
+
     }
 
     public void setCustomers(List<Customer> customers) {

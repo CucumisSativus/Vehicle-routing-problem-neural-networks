@@ -6,17 +6,15 @@ import com.pbw.ui.NieMaCustomeraWChujSrogiException;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class App {
     public static void main(String[] args) throws FileNotFoundException {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                    MapWindow mapWindow = new MapWindow(getDummyRoutes());
-                    mapWindow.setCustomers(getDummyCustomers());
+                List<Customer> dummyCustomers = getDummyCustomers();
+                    MapWindow mapWindow = new MapWindow(getDummyRoutes(dummyCustomers));
+                    mapWindow.setCustomers(dummyCustomers);
 
             }
         });
@@ -57,7 +55,16 @@ public class App {
         return result;
     }
 
-    private static Map<java.lang.Integer,List<Route>> getDummyRoutes() {
-        return new HashMap<java.lang.Integer, List<Route>>();
+    private static Map<Integer,List<Route>> getDummyRoutes(List<Customer> customers) {
+        HashMap<Integer, List<Route>> result = new HashMap<Integer, List<Route>>();
+        Integer customersSize = customers.size();
+
+        for(int i = 0; i<customersSize-1; i++) {
+            List<Route> routes = new ArrayList<Route>();
+            routes.add(new Route(customers.get(i).getCustNo(), customers.get(i+1).getCustNo(), 0));
+            result.put(i, routes);
+        }
+
+        return result;
     }
 }

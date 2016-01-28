@@ -8,6 +8,12 @@ public class Route {
     private Integer customerToId;
     private int time;
 
+    public Route(Integer customerFromId, Integer customerToId, int time) {
+        this.customerFromId = customerFromId;
+        this.customerToId = customerToId;
+        this.time = time;
+    }
+
     public Integer getCustomerFromId() {
         return customerFromId;
     }
