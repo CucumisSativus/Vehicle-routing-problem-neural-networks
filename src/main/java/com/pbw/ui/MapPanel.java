@@ -30,7 +30,7 @@ public class MapPanel extends JPanel {
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(250, 200);
+        return new Dimension(640, 480);
     }
 
     public void paintComponent(Graphics g) {
@@ -39,12 +39,14 @@ public class MapPanel extends JPanel {
         try {
             Iterator mapEntriesIterator = this.seed.entrySet().iterator();
             Integer groupIndex = 0;
+            Integer groupsCount  = this.seed.size();
+
             while (mapEntriesIterator.hasNext()) {
                 Map.Entry<java.lang.Integer, List<Route>> pair = (Map.Entry) mapEntriesIterator.next();
                 List<Route> routes = pair.getValue();
 
                 for (Route singleRoute : routes) {
-                    paintRouteWithCustomers(groupIndex, this.seed.size(), singleRoute, customers, g);
+                    paintRouteWithCustomers(groupIndex, groupsCount, singleRoute, customers, g);
                 }
 
                 mapEntriesIterator.remove();

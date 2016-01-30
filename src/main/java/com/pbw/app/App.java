@@ -48,22 +48,30 @@ public class App {
     private static List<Customer> getDummyCustomers() {
         ArrayList<Customer> result = new ArrayList<Customer>();
 
-        result.add(new Customer(1, 10, 10, 20, 30, 80, 10));
-        result.add(new Customer(2, 100, 10, 40, 40, 60, 10));
-        result.add(new Customer(3, 10, 100, 5, 10, 100, 10));
+        result.add(new Customer(1, 10, 10, 20, 20, 80, 10));
+        result.add(new Customer(2, 100, 10, 40, 30, 60, 10));
+        result.add(new Customer(3, 10, 100, 5, 0, 100, 10));
+
+        result.add(new Customer(4, 300,200,10, 0, 10, 30));
+        result.add(new Customer(5, 200,300,10, 0, 10, 30));
+        result.add(new Customer(6, 200,100,10, 40, 100, 20));
 
         return result;
     }
 
     private static Map<Integer,List<Route>> getDummyRoutes(List<Customer> customers) {
         HashMap<Integer, List<Route>> result = new HashMap<Integer, List<Route>>();
-        Integer customersSize = customers.size();
 
-        for(int i = 0; i<customersSize-1; i++) {
-            List<Route> routes = new ArrayList<Route>();
-            routes.add(new Route(customers.get(i).getCustNo(), customers.get(i+1).getCustNo(), 0));
-            result.put(i, routes);
-        }
+        List<Route> cluster1Routes = new ArrayList<Route>();
+        cluster1Routes.add(new Route(1,2,10));
+        cluster1Routes.add(new Route(2,3,20));
+        cluster1Routes.add(new Route(3,1,1));
+        result.put(1, cluster1Routes);
+
+        List<Route> cluster2Routes = new ArrayList<Route>();
+        cluster2Routes.add(new Route(4,5,5));
+        cluster2Routes.add(new Route(5,6,100));
+        result.put(2, cluster2Routes);
 
         return result;
     }
