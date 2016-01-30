@@ -2,7 +2,6 @@ package com.pbw.app;
 
 import com.pbw.app.SolomonReader.*;
 import com.pbw.ui.MapWindow;
-import com.pbw.ui.NieMaCustomeraWChujSrogiException;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
@@ -27,14 +26,13 @@ public class App {
         int gridWidth = p.getGridWidth();
         int gridHeight = p.getGridHeight();
         Clusterer clusterer = new Clusterer(
-                p.getVehicleCapacity(),
                 p.getGridWidth(),
                 p.getGridHeight(),
-                p.getCustomers()
-        );
+                p.getCustomers(),
+                10, 100);
         clusterer.train();
         for (int i = 0; i < p.getCustomers().size(); ++i) {
-            double clusters[] = clusterer.getClusters(i);
+            double clusters[] = clusterer.getClusters();
             System.out.print("" + i + "\t\t");
             for (double el : clusters) {
                 System.out.print("" + (int) el + "\t");
