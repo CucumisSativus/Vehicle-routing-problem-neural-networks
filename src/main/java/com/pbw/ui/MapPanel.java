@@ -17,6 +17,7 @@ public class MapPanel extends JPanel {
 
     private final Map<Integer, List<Route>> seed;
     private List<Customer> customers;
+    private Integer pointInTime;
 
     public MapPanel(Map<Integer, List<Route>> seed) {
         this(seed, new ArrayList<Customer>());
@@ -25,6 +26,7 @@ public class MapPanel extends JPanel {
     public MapPanel(Map<Integer, List<Route>> seed, List<Customer> customers) {
         this.customers = customers;
         this.seed = seed;
+        this.pointInTime = 0;
 
         this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
@@ -49,7 +51,6 @@ public class MapPanel extends JPanel {
                     paintRouteWithCustomers(groupIndex, groupsCount, singleRoute, customers, g);
                 }
 
-                mapEntriesIterator.remove();
                 groupIndex++;
             }
         } catch (NieMaCustomeraWChujSrogiException e) {
@@ -84,8 +85,8 @@ public class MapPanel extends JPanel {
 
         groupColor = Color.getHSBColor(groupIndex*1.0f/groupsCount, 1.0f, 1.0f);
 
-        paintCustomer(groupColor, customerFrom, graphics);
-        paintCustomer(groupColor, customerTo, graphics);
+        paintCustomer(groupColor, customerFrom, graphics, pointInTime);
+        paintCustomer(groupColor, customerTo, graphics, pointInTime);
 
         paintRoute(groupColor, customerFrom, customerTo,graphics);
     }
@@ -96,8 +97,14 @@ public class MapPanel extends JPanel {
         graphics.drawLine(customerFrom.getxCoord() + halvedCustomerSize, customerFrom.getyCoord() + halvedCustomerSize, customerTo.getxCoord() + halvedCustomerSize, customerTo.getyCoord() + halvedCustomerSize);
     }
 
-    private void paintCustomer(Color groupColor, Customer customer, Graphics graphics) {
-        graphics.setColor(groupColor);
+    private void paintCustomer(Color groupColor, Customer customer, Graphics graphics, Integer pointInTime) {
+        if(customer.isAvailableAtTime(pointInTime)) {
+            graphics.setColor(groupColor);
+        }
+        else {
+            graphics.setColor(groupColor.darker());
+        }
+
         graphics.fillArc(customer.getxCoord(), customer.getyCoord(), CUSTOMER_SIZE, CUSTOMER_SIZE, 0, 360);
         graphics.setColor(Color.white);
         graphics.drawString(Integer.toString(customer.getCustNo()), customer.getxCoord() + (CUSTOMER_SIZE/2), customer.getyCoord() + (CUSTOMER_SIZE/2) - 1);
@@ -106,5 +113,10 @@ public class MapPanel extends JPanel {
 
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
+    }
+
+    public void updatePointInTime(Integer pointInTime) {
+        this.pointInTime = pointInTime;
+        this.repaint();
     }
 }

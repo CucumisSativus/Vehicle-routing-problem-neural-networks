@@ -49,4 +49,8 @@ public class Customer {
     public int getServiceTime() {
         return serviceTime;
     }
+
+    public boolean isAvailableAtTime(Integer pointInTime) {
+        return pointInTime <= this.dueDate && pointInTime >= this.readyTime;
+    }
 }
