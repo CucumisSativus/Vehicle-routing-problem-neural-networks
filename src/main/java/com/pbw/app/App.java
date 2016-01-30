@@ -1,6 +1,7 @@
 package com.pbw.app;
 
 import com.pbw.app.SolomonReader.*;
+import com.pbw.app.validators.CapacityValidator;
 import com.pbw.ui.MapWindow;
 
 import javax.swing.*;
@@ -29,18 +30,23 @@ public class App {
                 p.getGridWidth(),
                 p.getGridHeight(),
                 p.getCustomers(),
-                10, 100);
+                3, 100);
         clusterer.train();
-        for (int i = 0; i < p.getCustomers().size(); ++i) {
-            double clusters[] = clusterer.getClusters();
-            System.out.print("" + i + "\t\t");
-            for (double el : clusters) {
-                System.out.print("" + (int) el + "\t");
+
+        Map<Integer, ArrayList<Customer>> clusters= clusterer.getClusters();
+
+        CapacityValidator capacityValidator = new CapacityValidator(p.getVehicleCapacity());
+
+        for (Integer clusterId : clusters.keySet()) {
+            System.out.println("Cluster " + clusterId);
+            ArrayList<Customer> customersInCluster = clusters.get(clusterId);
+            System.out.println("Capacity validation " + capacityValidator.validate(customersInCluster));
+            for(Customer c : customersInCluster){
+                System.out.println("\t" + c.getCustNo() + " x: " + c.getxCoord() + " y: " + c.getyCoord());
             }
             System.out.println();
-            System.out.println();
-            System.out.println();
         }
+
     }
 
     private static List<Customer> getDummyCustomers() {

@@ -36,11 +36,22 @@ public class Clusterer {
             network.setInput(customer.getxCoord(), customer.getyCoord());
             network.calculate();
             double[] output = network.getOutput();
-            int clusterId = roundToNearest((int)average(output), clusterResolution);
+            int averageOutput = (int) average(output);
+            int clusterId = roundToNearest(averageOutput, clusterResolution);
             clusteredCustomers.get(clusterId).add(customer);
 
         }
+        clearEmptyClusters();
         return clusteredCustomers;
+    }
+
+    private void clearEmptyClusters() {
+        for (int i = 0; i < maxClustersNum; i++) {
+            int clusterId = i * clusterResolution;
+            if(clusteredCustomers.get(clusterId).size() == 0){
+                clusteredCustomers.remove(clusterId);
+            }
+        }
     }
 
     private double average(double[] neuronOutputs){
