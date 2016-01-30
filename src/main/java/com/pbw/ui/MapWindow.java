@@ -17,6 +17,8 @@ public class MapWindow extends JFrame {
     private Map<java.lang.Integer, List<Route>> seed;
     private List<Customer> customers;
     private MapPanel map;
+    private MapSlider slider;
+
 
     public MapWindow() {
         this(new HashMap<java.lang.Integer, List<Route>>());
@@ -28,10 +30,13 @@ public class MapWindow extends JFrame {
         this.customers = new ArrayList<Customer>();
         this.seed = seed;
         this.map = new MapPanel(this.seed);
+        this.slider = new MapSlider();
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
         this.add(map);
+        this.add(slider);
         this.pack();
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
 
