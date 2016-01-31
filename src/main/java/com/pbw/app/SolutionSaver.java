@@ -32,10 +32,12 @@ public class SolutionSaver {
         solutionPath.getParentFile().mkdirs();
 
         out.write("SOLUTION" + crlf);
-        out.write("Average number of customers\t" + solution.getAverageCustomerOnARoad() + crlf);
-        out.write("Average load\t" + solution.getAverageLoad() + crlf);
-        out.write("Number of routes\t" + solution.getTotalRoutes() + crlf);
-        out.write("Total distance\t" + solution.getTotalDistance() + crlf);
+        out.write("Average number of customers\t\t\t" + solution.getAverageCustomerOnARoad() + crlf);
+        out.write("Average load\t\t\t" + solution.getAverageLoad() + crlf);
+        out.write("Number of routes\t\t\t" + solution.getTotalRoutes() + crlf);
+        out.write("Total distance\t\t\t" + solution.getTotalDistance() + crlf + crlf);
+
+        out.write("Route #\tPath\tCustomers\tLength" + crlf);
 
         while (routesByCarIterator.hasNext()) {
             List<Route> routesBySingleCar = (List<Route>) routesByCarIterator.next();
@@ -44,16 +46,18 @@ public class SolutionSaver {
 
             customersCount += customersOnRoute;
 
-            out.write(crlf + "Route #" + routeIndex++ + crlf);
+            out.write(routeIndex++ + "\tbase");
 
             for (Route singleRoute :
                     routesBySingleCar) {
+                int customerToId = singleRoute.getCustomerToId();
+
                 totalLength += singleRoute.getDistance();
-                out.write(singleRoute + crlf);
+                out.write(" > " + (customerToId > 0 ? customerToId : "base"));
             }
 
-            out.write(crlf + "Number of customers on the route\t" + customersOnRoute + crlf);
-            out.write("Length of the route\t" + totalLength + crlf);
+            out.write("\t" + customersOnRoute);
+            out.write("\t" + totalLength + crlf);
         }
 
 
