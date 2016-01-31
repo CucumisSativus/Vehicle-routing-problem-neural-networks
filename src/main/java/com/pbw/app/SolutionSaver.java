@@ -21,6 +21,7 @@ public class SolutionSaver {
 
         FileWriter out = new FileWriter(solutionPath.getAbsolutePath());
         out.write("Total distance" + solution.getTotalDistance());
+        out.close();
     }
     private Solution solution;
     private int solutionNumber;
