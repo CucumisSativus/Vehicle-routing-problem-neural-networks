@@ -1,6 +1,7 @@
 package com.pbw.app;
 
 import com.pbw.app.SolomonReader.*;
+import com.pbw.app.validators.AvailabilityValidator;
 import com.pbw.app.validators.CapacityValidator;
 import com.pbw.ui.MapWindow;
 
@@ -15,7 +16,6 @@ public class App {
                 List<Customer> dummyCustomers = getDummyCustomers();
                     MapWindow mapWindow = new MapWindow(getDummyRoutes(dummyCustomers));
                     mapWindow.setCustomers(dummyCustomers);
-
             }
         });
 
@@ -46,12 +46,12 @@ public class App {
             }
             System.out.println();
         }
-
     }
 
     private static List<Customer> getDummyCustomers() {
         ArrayList<Customer> result = new ArrayList<Customer>();
 
+        //Customer(int custNo, int xCoord, int yCoord, int demand, int readyTime, int dueDate, int service)
         result.add(new Customer(1, 10, 10, 20, 20, 80, 10));
         result.add(new Customer(2, 100, 10, 40, 30, 60, 10));
         result.add(new Customer(3, 10, 100, 5, 0, 100, 10));

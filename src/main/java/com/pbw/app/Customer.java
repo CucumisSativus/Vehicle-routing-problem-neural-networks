@@ -1,5 +1,7 @@
 package com.pbw.app;
 
+import java.util.List;
+
 /**
  * Created by michal on 27.01.2016.
  */
@@ -52,5 +54,16 @@ public class Customer {
 
     public boolean isAvailableAtTime(Integer pointInTime) {
         return pointInTime <= this.dueDate && pointInTime >= this.readyTime;
+    }
+
+    public static Customer findByNo(int custNo, List<Customer> customers) throws NieMaCustomeraWChujSrogiException {
+        for (Customer singleCustomer :
+                customers) {
+            if (singleCustomer.getCustNo() == custNo) {
+                return singleCustomer;
+            }
+        }
+
+        throw new NieMaCustomeraWChujSrogiException(custNo);
     }
 }
