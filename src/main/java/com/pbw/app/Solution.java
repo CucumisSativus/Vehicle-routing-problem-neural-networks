@@ -18,6 +18,7 @@ public class Solution {
         this.carCount = problem.getVehicles().size();
 
         this.calculateTotalDistance();
+        this.carCount = routesByCar.keySet().size();
     }
 
     private void calculateTotalDistance() throws NieMaCustomeraWChujSrogiException {
