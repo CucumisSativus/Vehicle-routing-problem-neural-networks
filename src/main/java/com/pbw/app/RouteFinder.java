@@ -11,7 +11,7 @@ public class RouteFinder {
 
 
     public RouteFinder(Customer startpoint, ArrayList<Customer> customersInCluster){
-        orderedCustomersInCluster = customersInCluster;
+        orderedCustomersInCluster = (ArrayList<Customer>) customersInCluster.clone();
         Collections.sort(orderedCustomersInCluster);
         this.timeStart = orderedCustomersInCluster.get(0).getReadyTime();
         this.startPoint = startpoint;
@@ -30,12 +30,23 @@ public class RouteFinder {
         while(orderedCustomersInCluster.size() != 0){
             Customer currentCustomer = orderedCustomersInCluster.remove(0);
 
-            routes.add(new Route(lastCustomer.getCustNo(), currentCustomer.getCustNo(), 0));
+            routes.add(new Route(
+                    lastCustomer.getCustNo(),
+                    currentCustomer.getCustNo(), 0,
+                    distance(lastCustomer, currentCustomer)));
+
             lastCustomer = currentCustomer;
         }
-        routes.add(new Route(lastCustomer.getCustNo(), startPoint.getCustNo(), 0));
+        routes.add(new Route(lastCustomer.getCustNo(), startPoint.getCustNo(), 0, 0));
 
         return routes;
+    }
+
+    private double distance(Customer from, Customer to){
+        return Math.sqrt(
+          Math.pow(from.getxCoord() - to.getxCoord(), 2) +
+                  Math.pow(from.getyCoord() - to.getyCoord(), 2)
+        );
     }
 
     private ArrayList<Customer> orderedCustomersInCluster;
