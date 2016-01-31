@@ -1,6 +1,7 @@
 package com.pbw.app;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,27 +16,30 @@ public class Solution {
         this.totalLoad = 0;
         this.totalRoutes = 0;
         this.customers = problem.getCustomers();
-        this.carCount = problem.getVehicles().size();
+        this.carCount = routesByCar.keySet().size();
 
         this.calculateTotalDistance();
-        this.carCount = routesByCar.keySet().size();
     }
 
     private void calculateTotalDistance() throws NieMaCustomeraWChujSrogiException {
-            for (Integer carId : routesByCar.keySet()) {
-                List<Route> routesBySingleCar = routesByCar.get(carId);
-                for (Route r : routesBySingleCar) {
-                    Integer fromCustomerId = r.getCustomerFromId();
+        Iterator routesByCarIterator = routesByCar.values().iterator();
 
-                    if (fromCustomerId > 0) {
-                        Customer fromCustomer = Customer.findByNo(fromCustomerId, customers);
-                        totalLoad += fromCustomer.getDemand();
-                    }
+        while (routesByCarIterator.hasNext()) {
+            List<Route> routesBySingleCar = (List<Route>) routesByCarIterator.next();
+            for(Route singleRoute : routesBySingleCar) {
 
-                    totalDistance += r.getDistance();
-                    totalRoutes += 1;
+                Integer fromCustomerId = singleRoute.getCustomerFromId();
+
+                if (fromCustomerId > 0) {
+                    Customer fromCustomer = Customer.findByNo(fromCustomerId, customers);
+                    totalLoad += fromCustomer.getDemand();
                 }
+
+                totalDistance += singleRoute.getDistance();
+                totalRoutes += 1;
             }
+        }
+
 
     }
 
@@ -52,7 +56,7 @@ public class Solution {
     }
 
     public double getAverageCustomerOnARoad() {
-        return customers.size() / carCount;
+        return 1.0*customers.size() / carCount;
     }
 
     public String getProblemName() {

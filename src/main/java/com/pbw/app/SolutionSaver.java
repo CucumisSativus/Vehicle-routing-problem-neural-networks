@@ -35,13 +35,14 @@ public class SolutionSaver {
         out.write("Average number of customers\t\t\t" + solution.getAverageCustomerOnARoad() + crlf);
         out.write("Average load\t\t\t" + solution.getAverageLoad() + crlf);
         out.write("Number of routes\t\t\t" + solution.getTotalRoutes() + crlf);
+        out.write("Number of paths\t\t\t" + routesByCar.size() + crlf);
         out.write("Total distance\t\t\t" + solution.getTotalDistance() + crlf + crlf);
 
-        out.write("Route #\tPath\tCustomers\tLength" + crlf);
+        out.write("Path #\tPath\tCustomers\tLength" + crlf);
 
         while (routesByCarIterator.hasNext()) {
             List<Route> routesBySingleCar = (List<Route>) routesByCarIterator.next();
-            int totalLength = 0;
+            double totalLength = 0;
             int customersOnRoute = (routesBySingleCar.size() - 1);
 
             customersCount += customersOnRoute;
