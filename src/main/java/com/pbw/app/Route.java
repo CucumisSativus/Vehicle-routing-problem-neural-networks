@@ -7,11 +7,14 @@ public class Route {
     private Integer customerFromId;
     private Integer customerToId;
     private int time;
+    private double distance;
 
-    public Route(Integer customerFromId, Integer customerToId, int time) {
+
+    public Route(Integer customerFromId, Integer customerToId, int time, double distance) {
         this.customerFromId = customerFromId;
         this.customerToId = customerToId;
         this.time = time;
+        this.distance = distance;
     }
 
     public Integer getCustomerFromId() {
@@ -36,5 +39,14 @@ public class Route {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    @Override
+    public String toString(){
+        return "from " + customerFromId + " to " + customerToId;
     }
 }

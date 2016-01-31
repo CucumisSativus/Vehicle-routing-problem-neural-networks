@@ -6,14 +6,29 @@ import com.pbw.app.validators.CapacityValidator;
 import com.pbw.ui.MapWindow;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class App {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
+        if(args.length != 2){
+            System.out.println("usage problems_path solution_path");
+            System.exit(1);
+        }
+
         ProblemReader reader = new ProblemReader(new SolomonReader(args[0]));
+
+        for (Problem p : reader.getProblems()) {
+            for(int solutionRerun =0; solutionRerun < 5; ++solutionRerun) {
+                Solution s = processProblem(p);
+                new SolutionSaver(s, solutionRerun, args[1]).saveToFile();
+            }
+        }
         final Problem p = reader.getProblems().get(0);
+
+    }
+
+    private static Solution processProblem(final Problem p) {
         ArrayList<Customer> customers = p.getCustomers();
         final Customer depot = customers.remove(0);
 
@@ -57,50 +72,20 @@ public class App {
             allRoutes.put(clusterId, routes);
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                    MapWindow mapWindow = new MapWindow(allRoutes);
-                    mapWindow.setCustomers(concatenateCustomers(depot, p.getCustomers()));
-            }
-        });
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                    MapWindow mapWindow = new MapWindow(allRoutes);
+//                    mapWindow.setCustomers(concatenateCustomers(depot, p.getCustomers()));
+//            }
+//        });
 
+        return new Solution(p, allRoutes);
     }
+
     private static List<Customer> concatenateCustomers(Customer startPoint, ArrayList<Customer> customersInCluster){
         List<Customer> customers = new ArrayList<Customer>();
         customers.add(startPoint);
         customers.addAll(customersInCluster);
         return customers;
-    }
-
-    private static List<Customer> getDummyCustomers() {
-        ArrayList<Customer> result = new ArrayList<Customer>();
-
-        //Customer(int custNo, int xCoord, int yCoord, int demand, int readyTime, int dueDate, int service)
-        result.add(new Customer(1, 10, 10, 20, 20, 80, 10));
-        result.add(new Customer(2, 100, 10, 40, 30, 60, 10));
-        result.add(new Customer(3, 10, 100, 5, 0, 100, 10));
-
-        result.add(new Customer(4, 300,200,10, 0, 10, 30));
-        result.add(new Customer(5, 200,300,10, 0, 10, 30));
-        result.add(new Customer(6, 200,100,10, 40, 100, 20));
-
-        return result;
-    }
-
-    private static Map<Integer,List<Route>> getDummyRoutes(List<Customer> customers) {
-        HashMap<Integer, List<Route>> result = new HashMap<Integer, List<Route>>();
-
-        List<Route> cluster1Routes = new ArrayList<Route>();
-        cluster1Routes.add(new Route(1,2,10));
-        cluster1Routes.add(new Route(2,3,20));
-        cluster1Routes.add(new Route(3,1,1));
-        result.put(1, cluster1Routes);
-
-        List<Route> cluster2Routes = new ArrayList<Route>();
-        cluster2Routes.add(new Route(4,5,5));
-        cluster2Routes.add(new Route(5,6,100));
-        result.put(2, cluster2Routes);
-
-        return result;
     }
 }
