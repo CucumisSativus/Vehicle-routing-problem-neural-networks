@@ -6,29 +6,21 @@ import com.pbw.app.validators.CapacityValidator;
 import com.pbw.ui.MapWindow;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.FileNotFoundException;
 import java.util.*;
 
 public class App {
     public static void main(String[] args) throws FileNotFoundException {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                List<Customer> dummyCustomers = getDummyCustomers();
-                    MapWindow mapWindow = new MapWindow(getDummyRoutes(dummyCustomers));
-                    mapWindow.setCustomers(dummyCustomers);
-            }
-        });
-
         ProblemReader reader = new ProblemReader(new SolomonReader(args[0]));
-        Problem p = reader.getProblems().get(0);
+        final Problem p = reader.getProblems().get(0);
         ArrayList<Customer> customers = p.getCustomers();
-        Customer depot = customers.remove(0);
+        final Customer depot = customers.remove(0);
 
         System.out.println(p.getName());
         System.out.println("Customer num" + p.getCustomers().size());
         System.out.println("Vehicles num" + p.getVehicles().size());
-        int gridWidth = p.getGridWidth();
-        int gridHeight = p.getGridHeight();
+
         Clusterer clusterer = new Clusterer(
                 p.getGridWidth(),
                 p.getGridHeight(),
@@ -37,6 +29,7 @@ public class App {
         clusterer.train();
 
         Map<Integer, ArrayList<Customer>> clusters= clusterer.getClusters();
+        final Map<Integer, List<Route>> allRoutes = new HashMap<Integer, List<Route>>();
 
         CapacityValidator capacityValidator = new CapacityValidator(p.getVehicleCapacity());
 
@@ -51,11 +44,32 @@ public class App {
 
             RouteFinder finder = new RouteFinder(depot, customersInCluster);
             List<Route> routes = finder.preprareRoutes();
+
+            AvailabilityValidator availabilityValidator = new AvailabilityValidator(
+                    concatenateCustomers(depot, customersInCluster)
+            );
+            System.out.println("Time validation " + availabilityValidator.validate(routes));
             for (Route r :
                     routes) {
                 System.out.println("From: " + r.getCustomerFromId() + " to " + r.getCustomerToId());
             }
+
+            allRoutes.put(clusterId, routes);
         }
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                    MapWindow mapWindow = new MapWindow(allRoutes);
+                    mapWindow.setCustomers(concatenateCustomers(depot, p.getCustomers()));
+            }
+        });
+
+    }
+    private static List<Customer> concatenateCustomers(Customer startPoint, ArrayList<Customer> customersInCluster){
+        List<Customer> customers = new ArrayList<Customer>();
+        customers.add(startPoint);
+        customers.addAll(customersInCluster);
+        return customers;
     }
 
     private static List<Customer> getDummyCustomers() {
