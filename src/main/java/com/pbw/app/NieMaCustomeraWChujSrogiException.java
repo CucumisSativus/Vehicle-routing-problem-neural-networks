@@ -1,4 +1,4 @@
-package com.pbw.ui;
+package com.pbw.app;
 
 /**
  * Created by Krzysiek on 2016-01-28.

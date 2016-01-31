@@ -51,6 +51,8 @@ public class MapWindow extends JFrame implements ChangeListener {
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
         this.map.setCustomers(customers);
+
+        this.map.repaint();
     }
 
     public void stateChanged(ChangeEvent e) {

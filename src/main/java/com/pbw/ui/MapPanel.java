@@ -1,6 +1,7 @@
 package com.pbw.ui;
 
 import com.pbw.app.Customer;
+import com.pbw.app.NieMaCustomeraWChujSrogiException;
 import com.pbw.app.Route;
 
 import javax.swing.*;
@@ -59,29 +60,11 @@ public class MapPanel extends JPanel {
     }
 
     private void paintRouteWithCustomers(Integer groupIndex, Integer groupsCount, Route route, List<Customer> customers, Graphics graphics) throws NieMaCustomeraWChujSrogiException {
-        Customer customerFrom = null;
-        Customer customerTo = null;
         Integer customerFromId = route.getCustomerFromId();
         Integer customerToId = route.getCustomerToId();
+        Customer customerFrom = Customer.findByNo(route.getCustomerFromId(), customers);
+        Customer customerTo = Customer.findByNo(route.getCustomerToId(), customers);
         Color groupColor = null;
-
-        for (Customer singleCustomer : customers) {
-            Integer singleCustomerId = singleCustomer.getCustNo();
-
-            if (customerFrom == null && singleCustomerId == customerFromId) {
-                customerFrom = singleCustomer;
-            }
-            if (customerTo == null && singleCustomerId == customerToId) {
-                customerTo = singleCustomer;
-            }
-            if (customerFrom != null && customerTo != null) {
-                break;
-            }
-        }
-
-        if (customerFrom == null || customerTo == null) {
-            throw new NieMaCustomeraWChujSrogiException(customerFrom == null ? customerFromId : customerToId);
-        }
 
         groupColor = Color.getHSBColor(groupIndex*1.0f/groupsCount, 1.0f, 1.0f);
 
