@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class App {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NieMaCustomeraWChujSrogiException {
         if(args.length != 2){
             System.out.println("usage problems_path solution_path");
             System.exit(1);
@@ -28,8 +28,8 @@ public class App {
 
     }
 
-    private static Solution processProblem(final Problem p) {
-        ArrayList<Customer> customers = p.getCustomers();
+    private static Solution processProblem(final Problem p) throws NieMaCustomeraWChujSrogiException {
+        ArrayList<Customer> customers = (ArrayList<Customer>) p.getCustomers().clone();
         final Customer depot = customers.remove(0);
 
         System.out.println(p.getName());

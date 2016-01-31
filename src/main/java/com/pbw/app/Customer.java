@@ -71,4 +71,9 @@ public class Customer implements Comparable{
 
         throw new NieMaCustomeraWChujSrogiException(custNo);
     }
+
+    @Override
+    public String toString() {
+        return "Customer #" + this.custNo;
+    }
 }

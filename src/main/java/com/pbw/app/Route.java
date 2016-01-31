@@ -47,6 +47,7 @@ public class Route {
 
     @Override
     public String toString(){
-        return "from " + customerFromId + " to " + customerToId;
+
+        return "From " + (customerFromId > 0 ? customerFromId : "base") + " to " + (customerToId > 0 ? customerToId : "base");
     }
 }
