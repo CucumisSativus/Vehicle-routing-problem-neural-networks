@@ -21,6 +21,9 @@ public class App {
 
         ProblemReader reader = new ProblemReader(new SolomonReader(args[0]));
         Problem p = reader.getProblems().get(0);
+        ArrayList<Customer> customers = p.getCustomers();
+        Customer depot = customers.remove(0);
+
         System.out.println(p.getName());
         System.out.println("Customer num" + p.getCustomers().size());
         System.out.println("Vehicles num" + p.getVehicles().size());
@@ -29,7 +32,7 @@ public class App {
         Clusterer clusterer = new Clusterer(
                 p.getGridWidth(),
                 p.getGridHeight(),
-                p.getCustomers(),
+                customers,
                 3, 100);
         clusterer.train();
 
@@ -45,6 +48,13 @@ public class App {
                 System.out.println("\t" + c.getCustNo() + " x: " + c.getxCoord() + " y: " + c.getyCoord());
             }
             System.out.println();
+
+            RouteFinder finder = new RouteFinder(depot, customersInCluster);
+            List<Route> routes = finder.preprareRoutes();
+            for (Route r :
+                    routes) {
+                System.out.println("From: " + r.getCustomerFromId() + " to " + r.getCustomerToId());
+            }
         }
 
     }

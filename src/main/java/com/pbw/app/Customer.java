@@ -3,7 +3,7 @@ package com.pbw.app;
 /**
  * Created by michal on 27.01.2016.
  */
-public class Customer {
+public class Customer implements Comparable{
     private int custNo;
     private int xCoord;
     private int yCoord;
@@ -52,5 +52,10 @@ public class Customer {
 
     public boolean isAvailableAtTime(Integer pointInTime) {
         return pointInTime <= this.dueDate && pointInTime >= this.readyTime;
+    }
+
+    public int compareTo(Object o) {
+        int otherReadyTime = ((Customer) o).getReadyTime();
+        return getReadyTime() - otherReadyTime;
     }
 }
